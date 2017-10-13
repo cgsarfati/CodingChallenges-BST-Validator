@@ -72,6 +72,38 @@ class Node:
     def is_valid(self):
         """Is this tree a valid BST?"""
 
+        # traverse BST; if successful, means valid
+        # need to keep track of GRANDPARENT nodes as well
+        # false if:
+            # parent less than current
+            # grandparent less than current
+
+        def _ok(n, lt, gt):
+            """Check node and recurse to children
+
+                lt: left children must be <= this
+                gt: right child must be >= this"""
+
+            if n is None:
+                return True
+
+            if lt is not None and n.data > lt:
+                return False
+
+            if gt is not None and n.data < gt:
+                return False
+
+            if not _ok(n.left, n.data, gt):
+                return False
+
+            if not _ok(n.right, lt, n.data):
+                return False
+
+            return True
+
+        return _ok(self, None, None)
+
+
 if __name__ == "__main__":
     import doctest
 
