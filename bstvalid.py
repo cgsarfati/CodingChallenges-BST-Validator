@@ -81,26 +81,39 @@ class Node:
         def _ok(n, lt, gt):
             """Check node and recurse to children
 
-                lt: left children must be <= this
-                gt: right child must be >= this"""
+                lt: left children must be <= this (aka lower)
+                gt: right child must be >= this (aka upper)"""
 
+            # BASE: not a node
             if n is None:
                 return True
 
+            # BASE:
+                # if bigger than allowed, fail fast
             if lt is not None and n.data > lt:
                 return False
 
+            # BASE:
+                # if smaller than allowed, fail fast
             if gt is not None and n.data < gt:
                 return False
 
+            # L CHILD PROGRESSION
+                # all desc. of L child must be < than our data
+                # and > than whatever we had to be greater than
             if not _ok(n.left, n.data, gt):
                 return False
 
+            # R CHILD PROGRESSION
+                # all desc. of R child must be > than our data
+                # and < than whatever we had to be less than
             if not _ok(n.right, lt, n.data):
                 return False
 
+            # WIN: if here, means recursive calls downwards valid
             return True
 
+        # START POINT (not L or R trav. yet, so initially None)
         return _ok(self, None, None)
 
 
