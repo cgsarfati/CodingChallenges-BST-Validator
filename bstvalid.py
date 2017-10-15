@@ -116,6 +116,31 @@ class Node:
         # START POINT (not L or R trav. yet, so initially None)
         return _ok(self, None, None)
 
+    def is_valid_exception(self):
+        """Uses ValueError vs. passing False up a recursive call stack."""
+
+        def _ok(n, lt, gt):
+
+            if n is None:
+                return
+
+            # Fail-fast if either condition not true like in original soln
+            if ((lt is not None and n.data > lt) or (gt is not None and n.data < gt)):
+                raise ValueError
+
+            # Check children
+            _ok(n.left, n.data, gt)
+            _ok(n.right, lt, n.data)
+
+        # Call recursive fn -- if returns, tree valid. Else, invalid.
+
+        try:
+            _ok(self, None, None)
+            return True
+
+        except ValueError:
+            return False
+
 
 if __name__ == "__main__":
     import doctest
